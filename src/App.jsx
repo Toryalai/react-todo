@@ -6,19 +6,45 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const savedTodos = localStorage.getItem('todos');
-        const initialTodos = savedTodos ? JSON.parse(savedTodos) : [];
-        resolve({ data: { todoList: initialTodos } });
-      }, 2000); 
-    });
 
-    fetchData.then((result) => {
-      setTodos(result.data.todoList);
-      setIsLoading(false); 
-    });
+  const fetchData = async () => {
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}`,
+      },
+    };
+
+    const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
+
+    try {
+      const response = await fetch(url, options);
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      const todos = data.records.map((record) => ({
+        id: record.id,
+        title: record.fields.title,
+      }));
+
+     
+      setTodos(todos);
+
+      
+      setIsLoading(false);
+    } catch (error) {
+      
+      console.error('Error fetching data from Airtable:', error.message);
+    }
+  };
+
+  
+  useEffect(() => {
+    fetchData(); 
   }, []);
 
   useEffect(() => {
@@ -32,7 +58,7 @@ function App() {
   };
 
   const removeTodo = (id) => {
-    const updatedTodos = todos.filter(todo => todo.id !== id);
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
     setTodos(updatedTodos);
   };
 
