@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'; 
 import AddTodoForm from './AddTodoForm';
 import TodoList from './TodoList';
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
 
   const fetchData = async () => {
     const options = {
@@ -31,18 +31,13 @@ function App() {
         title: record.fields.title,
       }));
 
-     
       setTodos(todos);
-
-      
       setIsLoading(false);
     } catch (error) {
-      
       console.error('Error fetching data from Airtable:', error.message);
     }
   };
 
-  
   useEffect(() => {
     fetchData(); 
   }, []);
@@ -63,17 +58,31 @@ function App() {
   };
 
   return (
-    <div>
-      <h1>Todo List</h1>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          <AddTodoForm onAddTodo={handleAddTodo} />
-          <TodoList todos={todos} onRemoveTodo={removeTodo} />
-        </>
-      )}
-    </div>
+    <BrowserRouter> 
+      <Routes> 
+        
+        <Route path="/" element={
+          <div>
+            <h1>Todo List</h1>
+            {isLoading ? (
+              <p>Loading...</p>
+            ) : (
+              <>
+                <AddTodoForm onAddTodo={handleAddTodo} />
+                <TodoList todos={todos} onRemoveTodo={removeTodo} />
+              </>
+            )}
+          </div>
+        } />
+        
+        {}
+        <Route path="/new" element={
+          <div>
+            <h1>New Todo List</h1> 
+          </div>
+        } />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
