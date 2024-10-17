@@ -22,17 +22,22 @@ function AddTodoForm({ onAddTodo }) {
   };
 
   return (
-    <form onSubmit={handleAddTodo}>
+    <form 
+      onSubmit={handleAddTodo} 
+      style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+    >
       <InputWithLabel
         id="todoTitle"
         value={todoTitle}
         onChange={handleTitleChange}
+        style={{ flex: 1 }}  
       >
         Title
       </InputWithLabel>
-      <button type="submit">Add</button>
+      <button type="submit" style={{ padding: '10px 15px' }}>Add</button>
     </form>
   );
+  
 }
 
 AddTodoForm.propTypes = {

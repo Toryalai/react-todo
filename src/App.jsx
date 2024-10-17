@@ -6,7 +6,7 @@ import TodoList from './components/TodoList';
 function App() {
   const [todos, setTodos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [sortOrder, setSortOrder] = useState('desc'); // State for sort order
+  const [sortOrder, setSortOrder] = useState('desc'); 
 
   const fetchData = async () => {
     const options = {
@@ -97,7 +97,7 @@ function App() {
             ) : (
               <>
                 <AddTodoForm onAddTodo={handleAddTodo} />
-                <button onClick={toggleSortOrder}>
+                <button style={{ margin: '10px' }} onClick={toggleSortOrder}>
                   Toggle Sort Order: {sortOrder === 'asc' ? 'Ascending' : 'Descending'}
                 </button>
                 <TodoList todos={todos} onRemoveTodo={removeTodo} />
